@@ -12,7 +12,7 @@ const generateAction = async (req, res) => {
   console.log(`API: ${basePromptPrefix}${req.body.userInput}`);
 
   const baseCompletion = await openai.createCompletion({
-    model: "text-davinci-002",
+    model: "text-davinci-003",
     prompt: `${basePromptPrefix}${req.body.userInput}\n`,
     temperature: 0.7,
     max_tokens: 250,
@@ -21,17 +21,17 @@ const generateAction = async (req, res) => {
   const basePromptOutput = baseCompletion.data.choices.pop();
 
   const secondPrompt = `
-  Take the table of contents below and generate a detailed idea for each one of them.
+  Take the table of contents below and generate a detailed idea for each one of them. Go in deep detail for each one of them.
 
-  Title: ${req.body.userInput}
+  ${req.body.userInput}
 
-  Table of Contents: ${basePromptOutput.text}
+  ${basePromptOutput.text}
 
   `;
 
   // I call the OpenAI API a second time with Prompt #2
   const secondPromptCompletion = await openai.createCompletion({
-    model: "text-davinci-002",
+    model: "text-davinci-003",
     prompt: `${secondPrompt}`,
     // I set a higher temperature for this one. Up to you!
     temperature: 0.85,
